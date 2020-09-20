@@ -32,7 +32,7 @@ def detection(fname):
 
 	
 	# image_path = "test1.JPG"
-	image_path = fname
+	image_path = './imgs/'+fname
 	new_img = image.load_img(image_path, target_size=(224, 224))
 	img = image.img_to_array(new_img)
 	img = np.expand_dims(img, axis=0)

@@ -5,7 +5,7 @@ from flask import Flask, request
 import os
 import uuid
 import importlib
-from test import detection
+from det import detection
 # creating a Flask app 
 app = Flask(__name__) 
   
@@ -22,7 +22,7 @@ def home():
         file = request.files['image']
         extension = os.path.splitext(file.filename)[1]
         f_name = str(uuid.uuid4()) + extension #name of the image file
-        file.save(os.path.join('.', f_name))
+        file.save(os.path.join('./imgs/', f_name))
         
         return detection(f_name)
         # return jsonify({'filename':f_name})
