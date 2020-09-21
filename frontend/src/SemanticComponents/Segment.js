@@ -10,16 +10,20 @@ import {
 import { Component } from "react";
 import Dropzone from "react-dropzone";
 import UploadService from "../services/upload-files.service";
+import ResultModal from "../components/Modal";
 import clone from "../services/cloneUtil";
 import { ImgContainer, TopRightCross } from "../components/Styled";
-import axios from "axios"
+import axios from "axios";
 class SegmentExample extends Component {
   constructor(props) {
     super(props);
     this.inputRef = React.createRef();
     this.state = {
       previewArray: [],
-      selectedFiles: []
+      selectedFiles: [],
+      response: {},
+      loading: false,
+      gotData: false
     };
   }
 
@@ -50,6 +54,7 @@ class SegmentExample extends Component {
   };
 
   upload = async () => {
+    this.setState({loading: true})
     // let currentFile = this.state.selectedFiles[0];
 
     // this.setState({
@@ -64,35 +69,25 @@ class SegmentExample extends Component {
       formData.append("image", file);
     });
 
-    const response = await axios({
-      method: "POST",
-      url: "http://localhost:5000/",
-      data: formData,
-      headers: {
-        "Content-Type": "multipart/form-data"
-      }
-    });
+    try {
+      const response = await axios({
+        method: "POST",
+        url: "http://localhost:5000/",
+        data: formData,
+        headers: {
+          "Content-Type": "multipart/form-data"
+        }
+      });
 
-    console.log(formData, response)
-
-    // UploadService.upload(currentFile, event => {
-    //   this.setState({
-    //     progress: Math.round((100 * event.loaded) / event.total)
-    //   });
-    // })
-    //   .then(response => {
-    //     this.setState({
-    //       message: response.data
-    //     });
-    //   })
-    //   .catch(() => {
-    //     this.setState({
-    //       progress: 0,
-    //       message: "Could not upload the file!",
-    //       currentFile: undefined
-    //     });
-    //   });
-
+      this.setState({
+        response: response.data,
+        loading: false,
+        gotData: true
+      });
+      console.log(formData, response);
+    } catch (error) {
+      console.log(error);
+    }
     this.setState({
       selectedFiles: []
     });
@@ -127,6 +122,8 @@ class SegmentExample extends Component {
           style={{ marginLeft: "150px", width: "100%" }}
           // {...getRootProps()}
         >
+          <ResultModal isModalOpen={this.state.gotData} data={this.state.response} preview={this.state.previewArray}/>
+
           <Header icon>
             <Icon name="search" />
             {/* <input {...getInputProps()} /> */}
@@ -158,7 +155,7 @@ class SegmentExample extends Component {
           >
             <Dimmer
               style={{ backgroundColor: "#81ce93e0", borderRadius: "10px" }}
-              active={false}
+              active={this.state.loading}
             >
               <Loader />
             </Dimmer>
