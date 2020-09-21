@@ -12,6 +12,7 @@ import Dropzone from "react-dropzone";
 import UploadService from "../services/upload-files.service";
 import clone from "../services/cloneUtil";
 import { ImgContainer, TopRightCross } from "../components/Styled";
+import axios from "axios"
 class SegmentExample extends Component {
   constructor(props) {
     super(props);
@@ -34,13 +35,11 @@ class SegmentExample extends Component {
   };
 
   setFileInState = async e => {
-
-    let toArray
-    if(this.state.selectedFiles.length){
-      toArray = clone([...this.state.selectedFiles])
-      toArray = toArray.concat([...e.target.files])
-    }
-    else{
+    let toArray;
+    if (this.state.selectedFiles.length) {
+      toArray = clone([...this.state.selectedFiles]);
+      toArray = toArray.concat([...e.target.files]);
+    } else {
       toArray = [...e.target.files];
     }
 
@@ -50,34 +49,52 @@ class SegmentExample extends Component {
     this.showImgs(toArray);
   };
 
-  upload = () => {
-    let currentFile = this.state.selectedFiles[0];
+  upload = async () => {
+    // let currentFile = this.state.selectedFiles[0];
 
-    this.setState({
-      progress: 0,
-      currentFile: currentFile
+    // this.setState({
+    //   progress: 0,
+    //   currentFile: currentFile
+    // });
+
+    let arrayOfYourFiles = this.state.selectedFiles;
+    // create formData object
+    const formData = new FormData();
+    arrayOfYourFiles.forEach(file => {
+      formData.append("image", file);
     });
 
-    UploadService.upload(currentFile, event => {
-      this.setState({
-        progress: Math.round((100 * event.loaded) / event.total)
-      });
-    })
-      .then(response => {
-        this.setState({
-          message: response.data
-        });
-      })
-      .catch(() => {
-        this.setState({
-          progress: 0,
-          message: "Could not upload the file!",
-          currentFile: undefined
-        });
-      });
+    const response = await axios({
+      method: "POST",
+      url: "http://localhost:5000/",
+      data: formData,
+      headers: {
+        "Content-Type": "multipart/form-data"
+      }
+    });
+
+    console.log(formData, response)
+
+    // UploadService.upload(currentFile, event => {
+    //   this.setState({
+    //     progress: Math.round((100 * event.loaded) / event.total)
+    //   });
+    // })
+    //   .then(response => {
+    //     this.setState({
+    //       message: response.data
+    //     });
+    //   })
+    //   .catch(() => {
+    //     this.setState({
+    //       progress: 0,
+    //       message: "Could not upload the file!",
+    //       currentFile: undefined
+    //     });
+    //   });
 
     this.setState({
-      selectedFiles: undefined
+      selectedFiles: []
     });
   };
 
@@ -91,7 +108,6 @@ class SegmentExample extends Component {
     this.setState({
       previewArray: temp
     });
-
   };
 
   render() {
