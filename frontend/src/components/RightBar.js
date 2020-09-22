@@ -115,7 +115,7 @@ class WeatherCard extends Component {
     return (
       <>
         <Header as="h3">Weather Forecast</Header>
-        <Card>
+        <Card className="hoverable">
           <Dimmer active={!loaded}>
             <Loader />
           </Dimmer>
@@ -137,7 +137,7 @@ class WeatherCard extends Component {
           details.daily.map((currEl, i) => {
             if (i !== 0) {
               return (
-                <Card key={i}>
+                <Card key={i} className="hoverable">
                   <Card.Content>
                     <Card.Header>
                       {this.kelvinToCelsius(currEl.temp.day).toFixed(0)}&deg; C

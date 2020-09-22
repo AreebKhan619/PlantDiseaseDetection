@@ -14,8 +14,7 @@ import ResultModal from "../components/Modal";
 import clone from "../services/cloneUtil";
 import { ImgContainer, TopRightCross } from "../components/Styled";
 import axios from "axios";
-import MainContext from "../Context"
-
+import MainContext from "../Context";
 
 class SegmentExample extends Component {
   constructor(props) {
@@ -25,7 +24,7 @@ class SegmentExample extends Component {
       previewArray: [],
       selectedFiles: [],
       response: {},
-      loading: false,
+      loading: false
     };
   }
 
@@ -56,7 +55,7 @@ class SegmentExample extends Component {
   };
 
   upload = async () => {
-    this.setState({loading: true})
+    this.setState({ loading: true });
     // let currentFile = this.state.selectedFiles[0];
 
     // this.setState({
@@ -83,7 +82,7 @@ class SegmentExample extends Component {
 
       this.setState({
         response: response.data,
-        loading: false,
+        loading: false
       });
       console.log(formData, response);
     } catch (error) {
@@ -123,7 +122,9 @@ class SegmentExample extends Component {
           style={{ marginLeft: "150px", width: "100%" }}
           // {...getRootProps()}
         >
-          <ResultModal isModalOpen={!this.state.loading && this.state.response?.res}/>
+          <ResultModal
+            isModalOpen={!this.state.loading && (this.state.response?.res?.length ? true : false)}
+          />
 
           <Header icon>
             <Icon name="search" />

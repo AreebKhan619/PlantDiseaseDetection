@@ -1,0 +1,9 @@
+.hoverable{
+	cursor: pointer;
+}
+
+.hoverable:hover{
+	transition: 0.3s all!important;
+	background: #62c179!important;
+	color: white!important;
+}

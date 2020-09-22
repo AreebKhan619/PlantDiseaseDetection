@@ -65,15 +65,23 @@ def home():
 
         # return jsonify({'filename':f_name})
 
+@app.route('/scrape', methods = ['POST'])
+def scrappo():
+    from search import scrape_search
+    plant = request.json['plant']
+    disease = request.json['disease']
+    return scrape_search(disease + ' in ' + plant + ' treatment')
+    
   
 # A simple function to calculate the square of a number 
 # the number to be squared is sent in the URL when we use GET 
 # on the terminal type: curl http://127.0.0.1:5000 / home / 10 
 # this returns 100 (square of 10) 
-@app.route('/home/<int:num>', methods = ['GET']) 
-def disp(num): 
+
+# @app.route('/home/<int:num>', methods = ['GET']) 
+# def disp(num): 
   
-    return jsonify({'data': num**2}) 
+#     return jsonify({'data': num**2}) 
   
   
 # driver function 
