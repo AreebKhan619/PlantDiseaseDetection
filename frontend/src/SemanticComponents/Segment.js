@@ -14,6 +14,9 @@ import ResultModal from "../components/Modal";
 import clone from "../services/cloneUtil";
 import { ImgContainer, TopRightCross } from "../components/Styled";
 import axios from "axios";
+import MainContext from "../Context"
+
+
 class SegmentExample extends Component {
   constructor(props) {
     super(props);
@@ -23,7 +26,6 @@ class SegmentExample extends Component {
       selectedFiles: [],
       response: {},
       loading: false,
-      gotData: false
     };
   }
 
@@ -82,7 +84,6 @@ class SegmentExample extends Component {
       this.setState({
         response: response.data,
         loading: false,
-        gotData: true
       });
       console.log(formData, response);
     } catch (error) {
@@ -107,7 +108,7 @@ class SegmentExample extends Component {
 
   render() {
     return (
-      <>
+      <MainContext.Provider value={this.state}>
         {/* <Dropzone
           accept="image/*"
           onDrop={acceptedFiles => {
@@ -122,7 +123,7 @@ class SegmentExample extends Component {
           style={{ marginLeft: "150px", width: "100%" }}
           // {...getRootProps()}
         >
-          <ResultModal isModalOpen={this.state.gotData} data={this.state.response} preview={this.state.previewArray}/>
+          <ResultModal isModalOpen={!this.state.loading && this.state.response?.res}/>
 
           <Header icon>
             <Icon name="search" />
@@ -198,7 +199,7 @@ class SegmentExample extends Component {
           accept="image/*"
           onChange={this.setFileInState}
         />
-      </>
+      </MainContext.Provider>
     );
   }
 }

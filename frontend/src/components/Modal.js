@@ -1,11 +1,12 @@
 import React, { Component } from "react";
 import { Button, Header, Image, Modal } from "semantic-ui-react";
+import MainContext from "../Context"
 
 class ResultModal extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      open: this.props.isModalOpen
+      open: false
     };
   }
 
@@ -23,16 +24,24 @@ class ResultModal extends Component {
 
   componentDidUpdate(prevProps,prevState,snapshot){
 	if(prevProps.isModalOpen !== this.props.isModalOpen){
-		this.setState({
-			open: this.props.isModalOpen
-		})
-	}
+    this.setState({
+      open: this.props.isModalOpen
+    })
+  }
+  }
+
+
+  componentDidMount(){
+    console.clear()
+    console.log(this.context)
   }
 
   render() {
-	  const {data} = this.props
     return (
-      <Modal
+      <MainContext.Consumer>
+        {
+          (stateObj)=>(
+            <Modal
         onClose={() => this.setOpen(false)}
         onOpen={() => this.setOpen(true)}
         open={this.state.open}
@@ -41,11 +50,11 @@ class ResultModal extends Component {
         <Modal.Header>Determination Complete. Here are the results</Modal.Header>
         <Modal.Content image>
           
-		  {this.state.open && data.res.map((currEl, i)=>{
+		  {this.state.open && this.context.response.res.map((currEl, i)=>{
 			  const {percentage, status, type} = currEl.result
 			  return(
 				  <React.Fragment key={i}>
-				<Image size="medium" src={this.props.preview[i]} wrapped/>
+				<Image size="medium" src={this.context.previewArray[i]} wrapped/>
 				<Modal.Description>
 				  <Header>{type}</Header>
 				  <p>
@@ -74,9 +83,13 @@ class ResultModal extends Component {
           />
         </Modal.Actions>
       </Modal>
+          )
+        }
+      
+      </MainContext.Consumer>
     );
   }
 }
-
+ResultModal.contextType = MainContext
 
 export default ResultModal;
