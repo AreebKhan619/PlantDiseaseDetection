@@ -5,10 +5,11 @@ position: absolute;
     top: 0;
     right: 0;
     font-size: 12px;
-    background-color: orange;
+    background-color: #e2a535;
     color: white;
     box-sizing: border-box;
     padding: 3px;
+    border-bottom-left-radius: 5px;
     // border-radius: inherit;
 `
 

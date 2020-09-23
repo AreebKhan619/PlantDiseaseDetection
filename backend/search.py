@@ -10,7 +10,7 @@ def scrape_search(query):
     r = requests.get(ddg_url, params={'q': query}, headers=headers)
     r.raise_for_status()
 
-    soup = BeautifulSoup(r.text)
+    soup = BeautifulSoup(r.text, features="lxml")
     arr = []
     for result in soup.findAll('div', class_='result__body'):
         link = result.find('a', class_='result__a')

@@ -8,8 +8,8 @@ import {
   Loader
 } from "semantic-ui-react";
 import { Component } from "react";
-import Dropzone from "react-dropzone";
-import UploadService from "../services/upload-files.service";
+// import Dropzone from "react-dropzone";
+// import UploadService from "../services/upload-files.service";
 import ResultModal from "../components/Modal";
 import clone from "../services/cloneUtil";
 import { ImgContainer, TopRightCross } from "../components/Styled";
@@ -24,9 +24,20 @@ class SegmentExample extends Component {
       previewArray: [],
       selectedFiles: [],
       response: {},
-      loading: false
+      loading: false,
+      con: {
+        clearUploadQueue: this.clearUploadQueue
+      }
     };
   }
+
+  clearUploadQueue = () => {
+    this.setState({
+      previewArray: [],
+      selectedFiles: []
+    })
+  }
+
 
   handleCrossClick = _index => {
     let t = clone([...this.state.selectedFiles]);
@@ -87,6 +98,10 @@ class SegmentExample extends Component {
       console.log(formData, response);
     } catch (error) {
       console.log(error);
+      window.alert(error)
+      this.setState({
+        loading: false
+      })
     }
     this.setState({
       selectedFiles: []
@@ -129,7 +144,8 @@ class SegmentExample extends Component {
           <Header icon>
             <Icon name="search" />
             {/* <input {...getInputProps()} /> */}
-            You haven't uploaded any image to check for diseases.
+            {/* You haven't uploaded any image to check for diseases. */}
+            Upload images to check for diseases.
           </Header>
           <Segment.Inline>
             <Button
@@ -182,7 +198,7 @@ class SegmentExample extends Component {
               );
             })}
           </div>
-          {this.state.previewArray.length && (
+          {this.state.previewArray.length!==0 && (
             <Button secondary onClick={this.upload}>
               Upload
             </Button>

@@ -1,17 +1,13 @@
 import React, { Component } from "react";
-import { Button, Header, Image, Modal, Icon, Grid } from "semantic-ui-react";
+import { Button, Header, Image, Modal, Message, Grid } from "semantic-ui-react";
 import MainContext from "../Context";
 import DuckDuckGo from "./DuckDuckGo";
 
-class ResultModal extends Component {
+class WeatherModal extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      open: false,
-      resultDetails: {
-        currentPage: 0,
-        lastPage: 0
-      }
+      open: false
     };
   }
 
@@ -27,25 +23,9 @@ class ResultModal extends Component {
     }
   };
 
-  componentDidUpdate(prevProps, prevState, snapshot) {
-    if (prevProps.isModalOpen !== this.props.isModalOpen) {
-      this.setState({
-        open: this.props.isModalOpen
-      });
-    }
-  }
-
-  componentDidMount() {
-    console.clear();
-    console.log(this.context);
-  }
 
   render() {
-    if (this.context.response?.res?.length) {
-      let currPage = this.state.resultDetails.currentPage;
-      let lastPage = this.context.response.res.length - 1;
-      let res = this.context.response.res[currPage].result;
-      return (
+    return (
         <MainContext.Consumer>
           {stateObj => (
             <Modal
@@ -71,19 +51,19 @@ class ResultModal extends Component {
               <Modal.Content image>
                 {this.state.open && (
                   <React.Fragment>
-                    <Image
+                    {/* <Image
                       size="medium"
                       style={{ borderRadius: "inherit" }}
                       src={this.context.previewArray[currPage]}
                       wrapped
-                    />
+                    /> */}
                     <Modal.Description style={{ width: "inherit" }}>
                       <Grid columns="three" divided>
                         <Grid.Row>
                           <Grid.Column>
                             <div style={{ marginBottom: "10px" }}>
                               <Header as="h3" style={{ margin: "0" }}>
-                                {res.type}
+                                {/* {res.type} */}
                               </Header>
                               <Header
                                 as="h5"
@@ -97,10 +77,7 @@ class ResultModal extends Component {
                           <Grid.Column>
                             <div style={{ marginBottom: "10px" }}>
                               <Header as="h3" style={{ margin: "0" }}>
-                                {res.status.replace("_", " ")}
-<Icon name={'circle ' +( res.status.toLowerCase()==="healthy"? 'check' : 'warning')} color={res.status.toLowerCase()==='healthy'? `green`:`red`} />
-
-                                
+                                {/* {res.status.replace("_", " ")} */}
                               </Header>
                               <Header
                                 as="h5"
@@ -114,7 +91,7 @@ class ResultModal extends Component {
                           <Grid.Column>
                             <div style={{ marginBottom: "10px" }}>
                               <Header as="h3" style={{ margin: "0" }}>
-                                {res.percentage.toFixed(2)}%
+                                {/* {res.percentage.toFixed(2)}% */}
                               </Header>
                               <Header
                                 as="h5"
@@ -128,21 +105,21 @@ class ResultModal extends Component {
                         </Grid.Row>
                       </Grid>
 
-                      {res.status.toLowerCase() !== "healthy" && (
+                      {/* {res.status.toLowerCase() !== "healthy" && (
                         <DuckDuckGo
                           data={{
                             plant: res.type,
                             disease: res.status.replace("_", " ")
                           }}
                         />
-                      )}
+                      )} */}
                     </Modal.Description>
                   </React.Fragment>
                 )}
               </Modal.Content>
               <Modal.Actions style={{ display: "flex", alignItems: "center" }}>
                 <span style={{ float: "left", fontWeight: "bolder" }}>
-                  Result {currPage + 1} of {lastPage + 1}{" "}
+                  {/* Result {currPage + 1} of {lastPage + 1}{" "} */}
                 </span>
                 {/* <Button
                   color="black"
@@ -161,7 +138,7 @@ class ResultModal extends Component {
                       content="Previous Result"
                       labelPosition="left"
                       icon="arrow left"
-                      disabled={currPage === 0}
+                    //   disabled={currPage === 0}
                       onClick={() =>
                         this.setState({
                           resultDetails: {
@@ -174,7 +151,7 @@ class ResultModal extends Component {
                       positive
                     />
                       <Button
-                      disabled={currPage===lastPage}
+                    //   disabled={currPage===lastPage}
                         content="Next Result"
                         labelPosition="right"
                         icon="arrow right"
@@ -204,11 +181,8 @@ class ResultModal extends Component {
           )}
         </MainContext.Consumer>
       );
-    } else {
-      return null;
-    }
   }
 }
-ResultModal.contextType = MainContext;
+WeatherModal.contextType = MainContext;
 
-export default ResultModal;
+export default WeatherModal;

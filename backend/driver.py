@@ -1,7 +1,8 @@
 
 # Using flask to make an api 
 # import necessary libraries and functions 
-from flask import Flask, request
+from flask import Flask, request, jsonify
+from waitress import serve
 from flask_cors import CORS, cross_origin
 import os
 import uuid
@@ -85,6 +86,10 @@ def scrappo():
   
   
 # driver function 
+
+# serve(app, host='0.0.0.0', port=5000, threads=1) #WAITRESS!
+
+
 if __name__ == '__main__': 
-  
     app.run(debug = True) 
+    

@@ -8,7 +8,11 @@ class DuckDuckGo extends Component {
     this.state = {
       loaded: false,
       data: [],
-      resultsView: false
+      resultsView: false,
+      articleDetails: {
+        currentPage: 0,
+        lastPage: 0
+      }
     };
   }
 
@@ -30,21 +34,32 @@ class DuckDuckGo extends Component {
     console.log(response.data);
     this.setState({
       loaded: true,
-      data: response.data.res
+      data: response.data.res,
+      articleDetails: {
+        currentPage: 0,
+        lastPage: response.data.res.length - 1
+      }
     });
   };
 
-
-  outsideNavigator = (link) => {
-    let w = window.open(link, '_blank')
-    w.focus()
-  }
+  outsideNavigator = link => {
+    let w = window.open(link, "_blank");
+    w.focus();
+  };
 
   render() {
+    const currPage = this.state.articleDetails.currentPage;
+    const lastPage = this.state.articleDetails.lastPage;
+
     if (!this.state.resultsView) {
       return (
         <>
-          <Message className="hoverable" onClick={()=>this.outsideNavigator(this.state.data[0].link)}>
+          <Message
+            className="hoverable"
+            onClick={() =>
+              this.outsideNavigator(this.state.data[currPage].link)
+            }
+          >
             <Dimmer
               style={{
                 backgroundColor: "#81ce93e0",
@@ -57,8 +72,10 @@ class DuckDuckGo extends Component {
             </Dimmer>
             {this.state.loaded && (
               <>
-                <Message.Header>{this.state.data[0].text}</Message.Header>
-                <p>{this.state.data[0].description}</p>
+                <Message.Header>
+                  {this.state.data[currPage].text}
+                </Message.Header>
+                <p>{this.state.data[currPage].description}</p>
               </>
             )}
           </Message>
@@ -66,17 +83,25 @@ class DuckDuckGo extends Component {
           <div style={{ textAlign: "center" }}>
             {this.state.data.length > 1 && (
               <>
-                <Button
-                  content="Previous"
-                  labelPosition="left"
-                  floated="left"
-                  icon="arrow left"
-                  // onClick={() => this.setOpen(false)}
-                  // positive
-                />
+                  <Button
+                    content="Previous Article"
+                    disabled={this.state.articleDetails.currentPage === 0}
+                    labelPosition="left"
+                    floated="left"
+                    icon="arrow left"
+                    onClick={() =>
+                      this.setState({
+                        articleDetails: {
+                          ...this.state.articleDetails,
+                          currentPage: this.state.articleDetails.currentPage - 1
+                        }
+                      })
+                    }
+                    // positive
+                  />
 
                 <Button
-                  content="View All"
+                  content="View All Articles"
                   onClick={() => this.setState({ resultsView: true })}
                   // labelPosition="left"
                   // icon="eye"
@@ -84,14 +109,24 @@ class DuckDuckGo extends Component {
                   // positive
                 />
 
-                <Button
-                  content="Next"
-                  labelPosition="right"
-                  floated="right"
-                  icon="arrow right"
-                  // onClick={() => this.setOpen(false)}
-                  // positive
-                />
+                        <Button
+                        disabled={this.state.articleDetails.currentPage===this.state.articleDetails.lastPage}
+                        content="Next Article"
+                        labelPosition="right"
+                        floated="right"
+                        icon="arrow right"
+                        onClick={() =>
+                          this.setState({
+                            articleDetails: {
+                              ...this.state.articleDetails,
+                              currentPage: this.state.articleDetails.currentPage + 1
+                            }
+                          })
+                        }
+                        // onClick={() => this.setOpen(false)}
+                        // positive
+                      />
+             
               </>
             )}
           </div>
@@ -113,7 +148,14 @@ class DuckDuckGo extends Component {
             <Modal.Description>
               {this.state.data.map((currEl, i) => {
                 return (
-                  <Message className="hoverable" onClick={()=>{this.outsideNavigator(currEl.link)}} key={i} style={{ maxWidth: "fit-content" }}>
+                  <Message
+                    className="hoverable"
+                    onClick={() => {
+                      this.outsideNavigator(currEl.link);
+                    }}
+                    key={i}
+                    style={{ maxWidth: "fit-content" }}
+                  >
                     <Message.Header>{currEl.text}</Message.Header>
                     <p>{currEl.description}</p>
                   </Message>
