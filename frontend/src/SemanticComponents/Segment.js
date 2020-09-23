@@ -5,11 +5,12 @@ import {
   Icon,
   Segment,
   Dimmer,
-  Loader
+  Loader,
+  Statistic,
+  Card,
+  Image
 } from "semantic-ui-react";
 import { Component } from "react";
-// import Dropzone from "react-dropzone";
-// import UploadService from "../services/upload-files.service";
 import ResultModal from "../components/Modal";
 import clone from "../services/cloneUtil";
 import { ImgContainer, TopRightCross } from "../components/Styled";
@@ -35,9 +36,8 @@ class SegmentExample extends Component {
     this.setState({
       previewArray: [],
       selectedFiles: []
-    })
-  }
-
+    });
+  };
 
   handleCrossClick = _index => {
     let t = clone([...this.state.selectedFiles]);
@@ -77,6 +77,7 @@ class SegmentExample extends Component {
     let arrayOfYourFiles = this.state.selectedFiles;
     // create formData object
     const formData = new FormData();
+    formData.append('user_id', localStorage.getItem("cred"));
     arrayOfYourFiles.forEach(file => {
       formData.append("image", file);
     });
@@ -98,10 +99,10 @@ class SegmentExample extends Component {
       console.log(formData, response);
     } catch (error) {
       console.log(error);
-      window.alert(error)
+      window.alert(error);
       this.setState({
         loading: false
-      })
+      });
     }
     this.setState({
       selectedFiles: []
@@ -121,103 +122,149 @@ class SegmentExample extends Component {
   };
 
   render() {
-    return (
-      <MainContext.Provider value={this.state}>
-        {/* <Dropzone
-          accept="image/*"
-          onDrop={acceptedFiles => {
-            // this.setFileInState(acceptedFiles)
-            console.log(acceptedFiles)
-          }
-        }
-        >
-          {({ getRootProps, getInputProps }) => ( */}
-        <Segment
-          placeholder
-          style={{ marginLeft: "150px", width: "100%" }}
-          // {...getRootProps()}
-        >
-          <ResultModal
-            isModalOpen={!this.state.loading && (this.state.response?.res?.length ? true : false)}
-          />
-
-          <Header icon>
-            <Icon name="search" />
-            {/* <input {...getInputProps()} /> */}
-            {/* You haven't uploaded any image to check for diseases. */}
-            Upload images to check for diseases.
-          </Header>
-          <Segment.Inline>
-            <Button
-              primary
-              onClick={() => this.inputRef.current.click()}
-              style={{ marginBottom: "10px" }}
-            >
-              {this.state.selectedFiles?.length ? "Add" : "Select"} Files
-            </Button>
-            {/* <Button positive onClick={this.showImgs}>Yup</Button> */}
-          </Segment.Inline>
-          {/* <p className="extra ui" style={{ textAlign: "center" }}>
-            Alternately, drag and drop images here
-          </p> */}
-          <div
-            style={{
-              display: "flex",
-              flexDirection: "row",
-              // width: "fit-content",
-              flexWrap: "wrap",
-              marginBottom: "10px",
-              position: "relative",
-              justifyContent: "center"
-            }}
+    if (!this.props.isAtHistory) {
+      return (
+        <MainContext.Provider value={this.state}>
+          <Segment
+            placeholder
+            style={{ marginLeft: "170px", width: "100%" }}
+            // {...getRootProps()}
           >
-            <Dimmer
-              style={{ backgroundColor: "#81ce93e0", borderRadius: "10px" }}
-              active={this.state.loading}
-            >
-              <Loader />
-            </Dimmer>
-            {this.state.previewArray.map((currEl, i) => {
-              return (
-                <React.Fragment key={i}>
-                  <ImgContainer>
-                    <TopRightCross onClick={() => this.handleCrossClick(i)}>
-                      X
-                    </TopRightCross>
-                    <img
-                      src={this.state.previewArray[i]}
-                      style={{
-                        height: "inherit",
-                        width: "inherit",
-                        borderRadius: "inherit"
-                      }}
-                      alt="hehe"
-                    />
-                  </ImgContainer>
-                </React.Fragment>
-              );
-            })}
-          </div>
-          {this.state.previewArray.length!==0 && (
-            <Button secondary onClick={this.upload}>
-              Upload
-            </Button>
-          )}
-        </Segment>
+            <ResultModal
+              isModalOpen={
+                !this.state.loading &&
+                (this.state.response?.res?.length ? true : false)
+              }
+            />
 
-        {/* )}
-        </Dropzone> */}
-        <input
-          ref={this.inputRef}
-          type="file"
-          multiple={true}
-          name="image"
-          style={{ display: "none" }}
-          accept="image/*"
-          onChange={this.setFileInState}
-        />
-      </MainContext.Provider>
-    );
+            <Header icon>
+              <Icon name="search" />
+              {/* <input {...getInputProps()} /> */}
+              {/* You haven't uploaded any image to check for diseases. */}
+              Upload images to check for diseases.
+            </Header>
+            <Segment.Inline>
+              <Button
+                primary
+                onClick={() => this.inputRef.current.click()}
+                style={{ marginBottom: "10px" }}
+              >
+                {this.state.selectedFiles?.length ? "Add" : "Select"} Files
+              </Button>
+              {/* <Button positive onClick={this.showImgs}>Yup</Button> */}
+            </Segment.Inline>
+            {/* <p className="extra ui" style={{ textAlign: "center" }}>
+              Alternately, drag and drop images here
+            </p> */}
+            <div
+              style={{
+                display: "flex",
+                flexDirection: "row",
+                // width: "fit-content",
+                flexWrap: "wrap",
+                marginBottom: "10px",
+                position: "relative",
+                justifyContent: "center"
+              }}
+            >
+              <Dimmer
+                style={{ backgroundColor: "#81ce93e0", borderRadius: "10px" }}
+                active={this.state.loading}
+              >
+                <Loader />
+              </Dimmer>
+              {this.state.previewArray.map((currEl, i) => {
+                return (
+                  <React.Fragment key={i}>
+                    <ImgContainer>
+                      <TopRightCross onClick={() => this.handleCrossClick(i)}>
+                        X
+                      </TopRightCross>
+                      <img
+                        src={this.state.previewArray[i]}
+                        style={{
+                          height: "inherit",
+                          width: "inherit",
+                          borderRadius: "inherit"
+                        }}
+                        alt="hehe"
+                      />
+                    </ImgContainer>
+                  </React.Fragment>
+                );
+              })}
+            </div>
+            {this.state.previewArray.length !== 0 && (
+              <Button secondary onClick={this.upload}>
+                Upload
+              </Button>
+            )}
+          </Segment>
+          <input
+            ref={this.inputRef}
+            type="file"
+            multiple={true}
+            name="image"
+            style={{ display: "none" }}
+            accept="image/*"
+            onChange={this.setFileInState}
+          />
+        </MainContext.Provider>
+      );
+    } else {
+      return (
+        <MainContext.Provider value={this.state}>
+          <Segment
+            placeholder
+            style={{ marginLeft: "170px", width: "100%" }}
+            // {...getRootProps()}
+          >
+            <div
+              style={{
+                display: "flex",
+                justifyContent: "space-around",
+                flexFlow: "wrap"
+              }}
+            >
+              <Statistic>
+                <Statistic.Value>5,550</Statistic.Value>
+                <Statistic.Label>Total Submissions</Statistic.Label>
+              </Statistic>
+              <Statistic>
+                <Statistic.Value>5,550</Statistic.Value>
+                <Statistic.Label>Detections</Statistic.Label>
+              </Statistic>
+              <Statistic>
+                <Statistic.Value>5,550</Statistic.Value>
+                <Statistic.Label>Submitted Today</Statistic.Label>
+              </Statistic>
+            </div>
+
+            <Card.Group itemsPerRow={4} style={{ marginTop: "20px" }}>
+              <Card>
+                <Image
+                  src="https://react.semantic-ui.com/images/avatar/large/daniel.jpg"
+                  ui={true}
+                />
+                <Card.Content>
+                  <Card.Header>Daniel</Card.Header>
+                  <Card.Meta>Joined in 2016</Card.Meta>
+                  <Card.Description>
+                    Daniel is a comedian living in Nashville.
+                  </Card.Description>
+                </Card.Content>
+                <Card.Content extra>
+                  <a>
+                    <Icon name="calendar alternate outline" />
+                    10 Friends
+                  </a>
+                </Card.Content>
+              </Card>
+            </Card.Group>
+          </Segment>
+        </MainContext.Provider>
+      );
+    }
   }
 }
 
