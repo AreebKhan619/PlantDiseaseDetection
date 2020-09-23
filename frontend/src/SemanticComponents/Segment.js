@@ -6,9 +6,6 @@ import {
   Segment,
   Dimmer,
   Loader,
-  Statistic,
-  Card,
-  Image
 } from "semantic-ui-react";
 import { Component } from "react";
 import ResultModal from "../components/Modal";
@@ -16,6 +13,7 @@ import clone from "../services/cloneUtil";
 import { ImgContainer, TopRightCross } from "../components/Styled";
 import axios from "axios";
 import MainContext from "../Context";
+import HistoryCards from "../components/HistoryCards"
 
 class SegmentExample extends Component {
   constructor(props) {
@@ -219,48 +217,8 @@ class SegmentExample extends Component {
             style={{ marginLeft: "170px", width: "100%" }}
             // {...getRootProps()}
           >
-            <div
-              style={{
-                display: "flex",
-                justifyContent: "space-around",
-                flexFlow: "wrap"
-              }}
-            >
-              <Statistic>
-                <Statistic.Value>5,550</Statistic.Value>
-                <Statistic.Label>Total Submissions</Statistic.Label>
-              </Statistic>
-              <Statistic>
-                <Statistic.Value>5,550</Statistic.Value>
-                <Statistic.Label>Detections</Statistic.Label>
-              </Statistic>
-              <Statistic>
-                <Statistic.Value>5,550</Statistic.Value>
-                <Statistic.Label>Submitted Today</Statistic.Label>
-              </Statistic>
-            </div>
-
-            <Card.Group itemsPerRow={4} style={{ marginTop: "20px" }}>
-              <Card>
-                <Image
-                  src="https://react.semantic-ui.com/images/avatar/large/daniel.jpg"
-                  ui={true}
-                />
-                <Card.Content>
-                  <Card.Header>Daniel</Card.Header>
-                  <Card.Meta>Joined in 2016</Card.Meta>
-                  <Card.Description>
-                    Daniel is a comedian living in Nashville.
-                  </Card.Description>
-                </Card.Content>
-                <Card.Content extra>
-                  <a>
-                    <Icon name="calendar alternate outline" />
-                    10 Friends
-                  </a>
-                </Card.Content>
-              </Card>
-            </Card.Group>
+          
+              <HistoryCards />
           </Segment>
         </MainContext.Provider>
       );

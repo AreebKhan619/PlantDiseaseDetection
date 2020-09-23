@@ -91,14 +91,35 @@ def login():
     
     
 @app.route('/getHistory', methods = ['POST'])
-def getHistory():
+def historee():
     from dbactions import getHistory
+    import base64
     user_id = request.json['user_id']
     try:
         ret = (getHistory(user_id))
-        return {'result':ret}
-    except:
-        return {'message':'Error'}
+        his = ret.get('history')
+        for h in his:
+            # print(h.get('name'))
+            with open(os.getcwd()+"/imgs/"+h.get('name'), "rb") as image_file:
+                # print(h.get('name'))
+                encoded_string = base64.b64encode(image_file.read())
+                h['imgURL']=str(encoded_string)
+        # # print(his)
+        # # print((os.path.join(os.path.join(os.getcwd(),'imgs')),h.get('name')))
+        # for h in his:
+        #     path = (((os.path.join(os.path.join(os.getcwd(),'imgs'),h.get('name')))))
+        #     print(path)
+        #     with open(path, "rb") as image_file:
+        #         encoded_string = base64.b64encode(image_file.read())
+        #         # h['imgURL']=str(encoded_string)
+        #         h['imgURL']="bruh"
+
+        # print(his)
+        
+        # print("******",jsonify(his))
+        return {'result':his}
+    except Exception as e:
+        return {'message':e}
 
     
 # A simple function to calculate the square of a number 

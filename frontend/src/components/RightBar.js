@@ -117,7 +117,7 @@ class WeatherCard extends Component {
         <Popup
           trigger={
             <Card className="hoverable">
-              <Dimmer active={!loaded}>
+              <Dimmer inverted active={!loaded}>
                 <Loader />
               </Dimmer>
               <Card.Content>
@@ -149,7 +149,7 @@ class WeatherCard extends Component {
             {details?.current?.weather[0]?.main}<br/>
             Cloudiness:{details?.current?.clouds}%<br />
             Wind Speed:{details?.current?.wind_speed}m/s<br/>
-            Rain chance:{loaded && details?.daily[0]?.pop} %
+            Rain chance:{loaded && (details?.daily[0]?.pop).toFixed(2)} %
           </Popup.Content>
         </Popup>
 
@@ -191,7 +191,7 @@ class WeatherCard extends Component {
                     Cloudiness: {currEl.clouds}%<br />
                     Wind Speed: {currEl.wind_speed}m/s
                     <br />
-                    Rain chance: {currEl.pop * 100}%
+                    Rain chance: {(currEl.pop * 100).toFixed(2)}%
                   </Popup.Content>
                 </Popup>
               );
