@@ -83,7 +83,7 @@ class ResultModal extends Component {
                           <Grid.Column>
                             <div style={{ marginBottom: "10px" }}>
                               <Header as="h3" style={{ margin: "0" }}>
-                                {res.type}
+                                {res.type.replace(/_/g," ")}
                               </Header>
                               <Header
                                 as="h5"
@@ -96,8 +96,8 @@ class ResultModal extends Component {
                           </Grid.Column>
                           <Grid.Column>
                             <div style={{ marginBottom: "10px" }}>
-                              <Header as="h3" style={{ margin: "0" }}>
-                                {res.status.replace("_", " ")}
+                              <Header as="h3" style={{ margin: "0", wordBreak: "break-word" }}>
+                                {res.status.replace(/_/g," ")}
 <Icon name={'circle ' +( res.status.toLowerCase()==="healthy"? 'check' : 'warning')} color={res.status.toLowerCase()==='healthy'? `green`:`red`} />
 
                                 
@@ -132,7 +132,7 @@ class ResultModal extends Component {
                         <DuckDuckGo
                           data={{
                             plant: res.type,
-                            disease: res.status.replace("_", " ")
+                            disease: res.status.replace(/_/g," ")
                           }}
                         />
                       )}

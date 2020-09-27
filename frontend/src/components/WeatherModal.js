@@ -109,7 +109,7 @@ class WeatherModal extends Component {
                         <DuckDuckGo
                           data={{
                             plant: res.type,
-                            disease: res.status.replace("_", " ")
+                            disease: res.status.replace(/_/g," ")
                           }}
                         />
                       )} */}

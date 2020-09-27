@@ -111,7 +111,7 @@ class HistoryCards extends Component {
         </div>
         <Card.Group itemsPerRow={4} style={{ marginTop: "20px" }}>
           {this.state.loaded &&
-            this.state.history.map((currEl, i) => (
+            this.state.history.reverse().map((currEl, i) => (
               <Card key={i}>
                 <Image
                   src={
@@ -121,12 +121,12 @@ class HistoryCards extends Component {
                   ui={true}
                 />
                 <Card.Content>
-                  <Card.Header>{currEl.type}</Card.Header>
+                  <Card.Header>{currEl.type.replace(/_/g," ")}</Card.Header>
                   <Card.Meta>
                     Accuracy: {currEl.percentage.toFixed(2)}%
                   </Card.Meta>
                   <Card.Description>
-                    Report: <b>{currEl.status.replace("_", " ")}</b>
+                    Report: <b>{currEl.status.replace(/_/g," ")}</b>
                   </Card.Description>
                 </Card.Content>
                 <Card.Content extra>
